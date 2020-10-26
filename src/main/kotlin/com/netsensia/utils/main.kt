@@ -23,10 +23,11 @@ fun main(args: Array<String>) {
 private fun report(eventName: String, namedEvents: List<DlqMessage>) {
 
     header("$eventName count: ${namedEvents.size}")
-    header("Consumers:")
     val consumerMap = namedEvents.stream().collect(groupingBy(DlqMessage::consumer))
 
     consumerMap.forEach {
+        header("Consumer")
+
         println("${it.key} ${it.value.size}".replace("\\", ""))
 
         header("Message IDs")
