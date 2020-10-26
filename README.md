@@ -1,4 +1,4 @@
-# DQL Helper
+# DLQ Helper
 
 ## Example usage
 
