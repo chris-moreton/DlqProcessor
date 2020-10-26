@@ -25,18 +25,19 @@ private fun report(eventName: String, namedEvents: List<DlqMessage>) {
     header("$eventName count: ${namedEvents.size}")
     val consumerMap = namedEvents.stream().collect(groupingBy(DlqMessage::consumer))
 
+    println("Number of distinct consumers: ${consumerMap.entries.size}")
+
     consumerMap.forEach {
-        header("Consumer")
+        val consumer = "${it.key} ${it.value.size}".replace("\\", "")
 
-        println("${it.key} ${it.value.size}".replace("\\", ""))
-
-        header("Message IDs")
+        header("Message IDs for consumer $consumer ")
         it.value.forEach { print("${it.msgContent._metadata.id},") }
         println()
 
-        header("Event IDs")
+        header("Event IDs for consumer $consumer")
         it.value.forEach { print("${it.msgContent._metadata.event.eventNumber},") }
 
+        println()
         println()
     }
 }
