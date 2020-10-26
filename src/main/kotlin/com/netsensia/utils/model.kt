@@ -1,7 +1,13 @@
 package com.netsensia.utils
 
-import java.time.ZonedDateTime
 import java.util.*
+
+data class DlqMessage(
+    val consumer: String,
+    val msgContent: MessageContent,
+    val messageId: UUID,
+    val originalDestination: String
+)
 
 data class Context(
     val user: UUID
@@ -38,9 +44,3 @@ data class MetaData(
 
     )
 
-data class DlqMessage(
-    val consumer: String,
-    val msgContent: MessageContent,
-    val messageId: UUID,
-    val originalDestination: String
-)
