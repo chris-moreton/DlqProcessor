@@ -2,7 +2,7 @@
 
 ## Example usage
 
-./gradlew run --args="/home/chrismoreton/git/cpp/DLQ_BrowseResults_Broker1 hearing.events.initiated"
+./gradlew run --args="/home/chrismoreton/git/cpp/DLQ_BrowseResults_Broker1 hearing.results-shared"
 
 ## Example output
     
