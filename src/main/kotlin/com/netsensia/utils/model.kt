@@ -28,7 +28,7 @@ data class MessageContent(
 )
 
 data class Correlation(
-    val client: UUID
+    val client: String
 )
 
 data class MetaData(
