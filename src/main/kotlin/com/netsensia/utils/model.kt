@@ -41,6 +41,5 @@ data class MetaData(
     val name: String,
     val source: String,
     val stream: Stream,
-
-    )
+)
 

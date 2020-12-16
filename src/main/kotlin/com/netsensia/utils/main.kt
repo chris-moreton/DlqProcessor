@@ -6,18 +6,30 @@ import java.lang.reflect.Type;
 import java.io.File
 import java.util.stream.Collectors.groupingBy
 
-
 fun main(args: Array<String>) {
 
-    val messageFile = args[0]
-    val eventName = args[1]
+    val messageFile = "../dlqs.json"
     val text = File(messageFile).readText()
     val listType: Type = object : TypeToken<List<DlqMessage?>?>() {}.type
     val dlqMessages = Gson().fromJson<List<DlqMessage>>(text, listType)
+    val eventNames = dlqMessages
+        .distinctBy { it.msgContent._metadata.name }
+        .map { it.msgContent._metadata.name }.toList()
 
-    val namedEvents = dlqMessages.filter{ it.msgContent._metadata.name.equals(eventName) }.toList()
+    val eventCounts = mutableMapOf<String, Int>()
 
-    report(eventName, namedEvents)
+    eventNames.forEach { eventName ->
+        eventCounts.put(eventName, dlqMessages.filter{ it.msgContent._metadata.name.equals(eventName) }.toList().count())
+        // report(eventName, namedEvents)
+    }
+
+    val sortedByCount = eventCounts.toSortedMap(compareBy<String> { -eventCounts[it]!! }.thenBy { it })
+
+    sortedByCount.forEach {
+        print( it.value.toString().padStart(6) )
+        print(" ")
+        println( it.key )
+    }
 }
 
 private fun report(eventName: String, namedEvents: List<DlqMessage>) {
