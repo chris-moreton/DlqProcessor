@@ -4,9 +4,11 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type;
 import java.io.File
+import java.time.ZonedDateTime
+import java.util.*
 import java.util.stream.Collectors.groupingBy
 
-fun main(args: Array<String>) {
+fun main() {
 
     val messageFile = "../dlqs.json"
     val text = File(messageFile).readText()
@@ -25,10 +27,26 @@ fun main(args: Array<String>) {
 
     val sortedByCount = eventCounts.toSortedMap(compareBy<String> { -eventCounts[it]!! }.thenBy { it })
 
+    recents(dlqMessages, days = 2)
+
     sortedByCount.forEach {
         print( it.value.toString().padStart(6) )
         print(" ")
         println( it.key )
+    }
+}
+
+private fun recents(dlqMessages: List<DlqMessage>, days: Long) {
+    val streamIds = mutableListOf<UUID>()
+
+    dlqMessages.filter { it.msgContent._metadata.name.equals("public.sjp.case-resulted") }.forEach { dlq ->
+        val streamId = dlq.msgContent._metadata.stream.id
+        val time = ZonedDateTime.parse(dlq.msgContent._metadata.createdAt)
+        val oneDayAgo = ZonedDateTime.now().minusDays(days)
+        if (!streamIds.contains(streamId) && time.isAfter(oneDayAgo)) {
+            streamIds.add(streamId)
+            println("\"${streamId}\",\"${time}\"")
+        }
     }
 }
 
