@@ -59,7 +59,7 @@ fun main() {
         print(it.value.count.toString().padStart(6))
         print(" ")
         println( it.key )
-        it.value.consumers.forEach { s, i ->
+        it.value.consumers.toSortedMap(compareBy { consumer -> -consumer.count() }).forEach { s, i ->
             println("-> ${i.toString()}".padStart(12) + " $s".replace("\\", ""))
         }
     }
