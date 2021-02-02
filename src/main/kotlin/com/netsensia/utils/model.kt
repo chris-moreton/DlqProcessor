@@ -5,7 +5,7 @@ import java.util.*
 data class DlqMessage(
     val consumer: String,
     val msgContent: MessageContent,
-    val messageId: UUID,
+    val msgId: UUID,
     val originalDestination: String
 )
 

@@ -13,9 +13,9 @@ data class DlqEventDetails(
     val consumers: MutableMap<String,Int>
 )
 
-fun main() {
+fun main(args: Array<String>) {
 
-    val DAYS = 7L
+    val DAYS = args[0].toLong()
     val oneDayAgo = ZonedDateTime.now().minusDays(DAYS)
 
     val messageFile = "../dlqs.json"
@@ -60,7 +60,7 @@ fun main() {
         print(" ")
         println( it.key )
         it.value.consumers.toSortedMap(compareBy { consumer -> -consumer.count() }).forEach { s, i ->
-            println("-> ${i.toString()}".padStart(12) + " $s".replace("\\", ""))
+            println("-> ${i}".padStart(12) + " with listener $s".replace("\\", ""))
         }
     }
 }
